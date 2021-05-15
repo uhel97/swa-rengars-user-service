@@ -71,7 +71,7 @@ public class UserServiceSpringContextTest {
         createOrUpdateUserDTO.setCity("Trieste");
         createOrUpdateUserDTO.setCountry("Italy");
         createOrUpdateUserDTO.setZipCode("34100");
-        createOrUpdateUserDTO.setRole(new Role(Role.HEADHUNTER, "HEADHUNTER"));
+        createOrUpdateUserDTO.setRole("HEADHUNTER");
 
         User createdUser = userService.createUser(createOrUpdateUserDTO);
 
@@ -87,7 +87,7 @@ public class UserServiceSpringContextTest {
 
         assertEquals("+3531122334499", createdUser.getContact().getPhoneNumber());
 
-        Role headhunterRole = new Role(Role.HEADHUNTER, "HEADHUNTER");
+        Role headhunterRole = Role.HEADHUNTER;
         assertEquals(createdUser.getRole(), headhunterRole);
 
 //        assertEquals("test note", createdUser.getNote());
@@ -114,7 +114,7 @@ public class UserServiceSpringContextTest {
         updateUserDTO.setCity("Trieste");
         updateUserDTO.setCountry("Italy");
         updateUserDTO.setZipCode("34100");
-        updateUserDTO.setRole(new Role(Role.APPLICANT, "APPLICANT"));
+        updateUserDTO.setRole("APPLICANT");
 
         User updatedUser = userService.updateUser(1L, updateUserDTO);
 
@@ -128,7 +128,7 @@ public class UserServiceSpringContextTest {
         assertEquals("MALE", updatedUser.getGender().name());
         assertEquals("+35344335522", updatedUser.getContact().getPhoneNumber());
 
-        Role applicantRole = new Role(Role.APPLICANT, "APPLICANT");
+        Role applicantRole = Role.APPLICANT;
         assertEquals(updateUserDTO.getRole(), applicantRole);
 
 //        assertEquals("update phone number note", updatedUser.getNote());

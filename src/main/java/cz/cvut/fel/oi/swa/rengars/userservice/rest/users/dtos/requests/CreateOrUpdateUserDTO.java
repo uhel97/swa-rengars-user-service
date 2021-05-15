@@ -25,24 +25,13 @@ public class CreateOrUpdateUserDTO implements Serializable {
     private String gender;
     private java.time.LocalDate birthDate;
     
-    private java.time.LocalDate createdAt;
-    private java.time.LocalDate updateddAt;
-    
-    private Role role;
-
-//    private boolean enabled;
-//    private boolean secured;
-
-//    private String note;
+//    private java.time.LocalDate createdAt;
+//    private java.time.LocalDate updateddAt;
 
     // contact information
     private String email;
     private String phoneNumber;
-//    private String skype;
-//    private String facebook;
     private String linkedin;
-//    private String website;
-//    private String contactNote;
 
     // address information
     private String address;
@@ -50,5 +39,8 @@ public class CreateOrUpdateUserDTO implements Serializable {
     private String city;
     private String country;
     private String zipCode;
+
+    // role inforamtion
+    private String role;
 
 }

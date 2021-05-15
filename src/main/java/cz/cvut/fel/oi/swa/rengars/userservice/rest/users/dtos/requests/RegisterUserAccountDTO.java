@@ -19,14 +19,11 @@ public class RegisterUserAccountDTO implements Serializable {
 
     private String username;
     private String password;
-
     private String name;
     private String surname;
     private String email;
     private String gender;
-    
-    private Role role;
-    
-    private java.time.LocalDate createdAt;
+    private String role;
+//    private java.time.LocalDate createdAt;
 
 }

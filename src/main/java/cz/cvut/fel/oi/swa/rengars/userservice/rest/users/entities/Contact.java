@@ -23,20 +23,8 @@ public class Contact {
     @Column(name="phoneNumber")
     private String phoneNumber;
 
-//    @Column(name="skype")
-//    private String skype;
-
-//    @Column(name="facebook")
-//    private String facebook;
-
     @Column(name="linkedin")
     private String linkedin;
-
-//    @Column(name = "website")
-//    private String website;
-
-//    @Column(name="note")
-//    private String note;
 
     @OneToOne
     @MapsId

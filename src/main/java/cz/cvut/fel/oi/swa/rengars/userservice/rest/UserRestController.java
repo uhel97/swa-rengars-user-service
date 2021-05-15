@@ -48,26 +48,15 @@ public class UserRestController {
         return ResponseEntity.noContent().build();
     }
     
-    @GetMapping
-    public ResponseEntity<UserListDTO> getUsersListByRole(@PathVariable("roleId") Long roleId) {
+    @GetMapping("/{role}")
+    public ResponseEntity<UserListDTO> getUsersListByRole(@PathVariable("role") String role) {
         List<UserDTO> list = userService.getUsersList();
         UserListDTO userListDTO = new UserListDTO();
-        list.stream().filter((user) -> (Objects.equals(user.getRoleDTO().getId(), roleId))).forEachOrdered((user) -> {
+        list.stream().filter((user) -> (Objects.equals(user.getRole(), role))).forEachOrdered((user) -> {
             userListDTO.getUserList().add(user);
         });
-//        list.stream().forEach(e -> userListDTO.getUserList().add(e) );
+
         return ResponseEntity.ok(userListDTO);
     }
-
-//    // add or remove a Role on a user
-//    @PostMapping("/{id}/roles/{roleId}")
-//    public ResponseEntity<UserDTO> addRole(@PathVariable("id") Long id, @PathVariable("roleId") Long roleId) {
-//        return new ResponseEntity(new UserDTO(userService.addRole(id, roleId)), null, HttpStatus.CREATED);
-//    }
-
-//    @DeleteMapping("/{id}/roles/{roleId}")
-//    public ResponseEntity<UserDTO> removeRole(@PathVariable("id") Long id, @PathVariable("roleId") Long roleId) {
-//        return new ResponseEntity(new UserDTO(userService.removeRole(id, roleId)), null, HttpStatus.OK);
-//    }
 
 }

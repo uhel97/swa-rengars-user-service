@@ -43,32 +43,15 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Address address;
-    
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+
+    @Enumerated
+    @Column(columnDefinition = "tinyint")
     private Role role;
-
-//    @Column(name="enabled")
-//    private boolean enabled;
-
-//    @Column(name="note")
-//    private String note;
 
     @Basic
     private java.time.LocalDateTime createdAt;
 
     @Basic
     private java.time.LocalDateTime updatedAt;
-
-//    @Basic
-//    private java.time.LocalDateTime loginDt;
-
-//    @ManyToMany(fetch=FetchType.EAGER)
-//    @JoinTable(name = "users_roles",
-//               joinColumns = @JoinColumn(name = "user_id"),
-//               inverseJoinColumns = @JoinColumn(name = "role_id"))
-//    private Set<Role> roles = new HashSet<>();
-
-//    @Column(name="secured")
-//    private boolean secured;
 
 }

@@ -15,7 +15,6 @@ import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.requests.CreateOrU
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.requests.RegisterUserAccountDTO;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.repositories.AddressRepository;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.repositories.ContactRepository;
-import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.repositories.RoleRepository;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.repositories.UserRepository;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.services.validation.EmailValidator;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.services.validation.PasswordValidator;
@@ -44,9 +43,6 @@ public class UserService {
 
     @Autowired
     private AddressRepository addressRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
 
     @Value("${microservice.security.salt}")
     private String salt;
@@ -112,14 +108,15 @@ public class UserService {
 
         user.setName(registerUserAccountDTO.getName());
         user.setSurname(registerUserAccountDTO.getSurname());
-//        user.setEnabled(true);
-//        user.setSecured(false);
 
         // set gender
         Gender gender = Gender.getValidGender(registerUserAccountDTO.getGender());
         user.setGender(gender);
 
-        setUserRole(user, registerUserAccountDTO.getRole());
+        // set role
+        Role role = Role.getValidRole(registerUserAccountDTO.getRole());
+        user.setRole(role);
+
         user.setCreatedAt(LocalDateTime.now());
 
         User userCreated = userRepository.save(user);
@@ -186,20 +183,14 @@ public class UserService {
         Gender gender = Gender.getValidGender(createUserDTO.getGender());
         user.setGender(gender);
 
+        // set role
+        Role role = Role.getValidRole(createUserDTO.getRole());
+        user.setRole(role);
+
         // date of birth
         user.setBirthDate(createUserDTO.getBirthDate());
 
-//        user.setEnabled(true);
-//        user.setSecured(createUserDTO.isSecured());
-
-//        user.setNote(createUserDTO.getNote());
         user.setCreatedAt(LocalDateTime.now());
-
-        // set default user the role
-        Role role = new Role();
-        role.setId(createUserDTO.getRole().getId());
-        role.setRole(createUserDTO.getRole().getRole());
-        setUserRole(user, role);
 
         User userCreated = userRepository.save(user);
 
@@ -207,11 +198,7 @@ public class UserService {
         Contact contact = new Contact();
         contact.setEmail(createUserDTO.getEmail());
         contact.setPhoneNumber(createUserDTO.getPhoneNumber());
-//        contact.setSkype(createUserDTO.getSkype());
-//        contact.setFacebook(createUserDTO.getFacebook());
         contact.setLinkedin(createUserDTO.getLinkedin());
-//        contact.setWebsite(createUserDTO.getWebsite());
-//        contact.setNote(createUserDTO.getContactNote());
 
         addContactOnUser(userCreated, contact);
 
@@ -243,13 +230,6 @@ public class UserService {
         user.setAddress(address);
 
         log.debug(String.format("Address information set on User %s .", user.getId()));
-    }
-
-    public void setUserRole(User user, Role role) {
-        role.setUser(user);
-        user.setRole(role);
-
-        log.debug(String.format("Role information set on User %s .", user.getId()));
     }
 
     @Transactional
@@ -307,21 +287,18 @@ public class UserService {
         Gender gender = Gender.getValidGender(updateUserDTO.getGender());
         user.setGender(gender);
 
+        // set role
+        Role role = Role.getValidRole(updateUserDTO.getRole());
+        user.setRole(role);
+
         // date of birth
         user.setBirthDate(updateUserDTO.getBirthDate());
-
-//        user.setEnabled(updateUserDTO.isEnabled());
-//        user.setNote(updateUserDTO.getNote());
 
         // set contact: entity always present
         Contact contact = user.getContact();
         contact.setEmail(updateUserDTO.getEmail());
         contact.setPhoneNumber(updateUserDTO.getPhoneNumber());
-//        contact.setSkype(updateUserDTO.getSkype());
-//        contact.setFacebook(updateUserDTO.getFacebook());
         contact.setLinkedin(updateUserDTO.getLinkedin());
-//        contact.setWebsite(updateUserDTO.getWebsite());
-//        contact.setNote(updateUserDTO.getContactNote());
 
         user.setUpdatedAt(LocalDateTime.now());
 
@@ -359,101 +336,8 @@ public class UserService {
             throw new UserNotFoundException(String.format("User not found with Id = %s", id));
         }
 
-//        // only not secured users can be deleted
-//        User user = userOpt.get();
-//        if (user.isSecured()) {
-//            throw new UserIsSecuredException(String.format("User %s is secured and cannot be deleted.", id));
-//        }
-
         userRepository.deleteById(id);
         log.info(String.format("User %s has been deleted.", id));
     }
-
-//    @Transactional
-//    public User login(String username, String password) {
-//        if ((Strings.isNullOrEmpty(username)) || (Strings.isNullOrEmpty(password))) {
-//            throw new InvalidLoginException("Username or Password cannot be null or empty");
-//        }
-//
-//        User user = getUserByUsername(username);
-//        if (user == null) {
-//            // invalid username
-//            throw new InvalidLoginException("Invalid username or password");
-//        }
-//
-//        log.info(String.format("Login request from %s", username));
-//
-//        // check the password
-//        if (EncryptionService.isPasswordValid(password, user.getPassword(), salt)) {
-//            // check if the user is enabled
-//            if (!user.isEnabled()) {
-//                // not enabled
-//                throw new InvalidLoginException("User is not enabled");
-//            }
-//
-//            // update the last login timestamp
-//            user.setLoginDt(LocalDateTime.now());
-//            userRepository.save(user);
-//
-//            log.info(String.format("Valid login for %s", username));
-//        } else {
-//            throw new InvalidLoginException("Invalid username or password");
-//        }
-//        return user;
-//    }
-
-    // add or remove a role on user
-
-//    @Transactional
-//    public User addRole(Long id, Long roleId) {
-//        // check user
-//        Optional<User> userOpt = userRepository.findById(id);
-//        if (!userOpt.isPresent()) {
-//            throw new UserNotFoundException(String.format("User not found with Id = %s", id));
-//        }
-//        User user = userOpt.get();
-//
-//        // check role
-//        Optional<Role> roleOpt = roleRepository.findById(roleId);
-//        if (!roleOpt.isPresent()) {
-//            throw new RoleNotFoundException(String.format("Role not found with Id = %s", roleId));
-//        }
-//
-//        Role role = roleOpt.get();
-//
-//        user.getRoles().add(role);
-//        user.setUpdatedDt(LocalDateTime.now());
-//
-//        userRepository.save(user);
-//        log.info(String.format("Added role %s on user id = %s", role.getRole(), user.getId()));
-//
-//        return user;
-//    }
-
-//    @Transactional
-//    public User removeRole(Long id, Long roleId) {
-//        // check user
-//        Optional<User> userOpt = userRepository.findById(id);
-//        if (!userOpt.isPresent()) {
-//            throw new UserNotFoundException(String.format("User not found with Id = %s", id));
-//        }
-//        User user = userOpt.get();
-//
-//        // check role
-//        Optional<Role> roleOpt = roleRepository.findById(roleId);
-//        if (!roleOpt.isPresent()) {
-//            throw new RoleNotFoundException(String.format("Role not found with Id = %s", roleId));
-//        }
-//
-//        Role role = roleOpt.get();
-//
-//        user.getRoles().remove(role);
-//        user.setUpdatedDt(LocalDateTime.now());
-//
-//        userRepository.save(user);
-//        log.info(String.format("Removed role %s on user id = %s", role.getRole(), user.getId()));
-//
-//        return user;
-//    }
 
 }

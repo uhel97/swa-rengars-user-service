@@ -1,7 +1,5 @@
 package cz.cvut.fel.oi.swa.rengars.userservice.rest.users.services;
 
-import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.services.EncryptionService;
-import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.services.UserService;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.exceptions.InvalidEmailException;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.exceptions.InvalidUsernameException;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.exceptions.InvalidUserDataException;
@@ -15,7 +13,6 @@ import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.requests.RegisterU
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.entities.Gender;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.entities.Role;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.entities.User;
-import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.repositories.RoleRepository;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.repositories.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +27,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static cz.cvut.fel.oi.swa.rengars.userservice.rest.users.services.UserTestHelper.getUserTestData;
 import static org.junit.Assert.*;
@@ -43,9 +39,6 @@ public class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private RoleRepository roleRepository;
 
     @Autowired
     @InjectMocks
@@ -464,15 +457,15 @@ public class UserServiceTest {
 //        User user = userService.addRole(99L, 2L);
 //    }
 
-    @Test(expected = RoleNotFoundException.class)
-    public void given_existingUserId_notExistingRoleId_when_addRole_throw_RoleNotFoundException() {
-        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-
-        given(userRepository.findById(1L)).willReturn(Optional.of(userDataForTest));
-
-        userService.setUserRole(userDataForTest, new Role());
-    }
+//    @Test(expected = RoleNotFoundException.class)
+//    public void given_existingUserId_notExistingRoleId_when_addRole_throw_RoleNotFoundException() {
+//        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
+//                "Giassi", "andrea.test@gmail.com", "+3531122334455");
+//
+//        given(userRepository.findById(1L)).willReturn(Optional.of(userDataForTest));
+//
+//        userService.setUserRole(userDataForTest, Role.NECO);
+//    }
 
     @Test
     public void given_validUserAndRoleIds_when_addRole_returnUser() {
@@ -481,11 +474,11 @@ public class UserServiceTest {
 
         given(userRepository.findById(1L)).willReturn(Optional.of(userDataForTest));
 
-        Role roleHeadhunter = new Role(Role.HEADHUNTER, "Headhunter");
+        Role roleHeadhunter = Role.HEADHUNTER;
 
-        given(roleRepository.findById(2L)).willReturn(Optional.of(roleHeadhunter));
+//        given(roleRepository.findById(2L)).willReturn(Optional.of(roleHeadhunter));
 
-        userService.setUserRole(userDataForTest, roleHeadhunter);
+//        userService.setUserRole(userDataForTest, roleHeadhunter);
 
 //        assertNotNull(user);
 

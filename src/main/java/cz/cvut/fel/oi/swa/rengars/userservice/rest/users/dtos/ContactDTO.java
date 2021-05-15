@@ -21,5 +21,4 @@ public class ContactDTO implements java.io.Serializable {
     private String email;
     private String phoneNumber;
     private String linkedin;
-
 }

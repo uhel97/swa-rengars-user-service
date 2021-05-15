@@ -40,7 +40,7 @@ public class UserTestHelper {
 //        user.setLoginDt(null);
 
         // add the USER role
-        user.setRole(new Role(Role.APPLICANT, "APPLICANT"));
+        user.setRole(Role.APPLICANT);
         
         return user;
     }

@@ -2,7 +2,6 @@ package cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos;
 
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.entities.Address;
 import lombok.Data;
-
 import java.io.Serializable;
 
 @Data

@@ -44,7 +44,7 @@ public class UserDTOTest {
         LocalDateTime updatedAt = LocalDateTime.of(2020, 2, 1, 16, 45);
         user.setUpdatedAt(updatedAt);
 
-        Role roleHeadhunter = new Role(Role.HEADHUNTER, "HEADHUNTER");
+        Role roleHeadhunter = Role.HEADHUNTER;
 
         user.setRole(roleHeadhunter);
 
@@ -110,7 +110,7 @@ public class UserDTOTest {
         user.setUpdatedAt(updatedAt);
 
         // create role
-        Role roleApplicant = new Role(Role.APPLICANT, "APPLICANT");
+        Role roleApplicant = Role.APPLICANT;
 
 //        Permission p1 = new Permission(1L, "LOGIN", true, "Login");
 //        Permission p2 = new Permission(2L, "VIEW_PROFILE", true, "View Profile");
