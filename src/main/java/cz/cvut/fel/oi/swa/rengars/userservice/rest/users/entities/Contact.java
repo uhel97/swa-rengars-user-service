@@ -20,7 +20,7 @@ public class Contact {
     @Column(name="email", nullable = false)
     private String email;
 
-    @Column(name="phoneNumber")
+    @Column(name="phone_number")
     private String phoneNumber;
 
     @Column(name="linkedin")

@@ -215,29 +215,28 @@ public class UserServiceTest {
 //        userService.addUserRole(userDataForTest, 1);
 //    }
 
-//    @Test
-//    public void given_valid_role_id_when_setUserRole_returnUser() {
-//        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-//                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-//
+    @Test
+    public void given_valid_role_id_when_setUserRole_returnUser() {
+        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
+                "Giassi", "andrea.test@gmail.com", "+3531122334455");
+
 //        given(roleRepository.findById(Role.USER)).willReturn(Optional.of(new Role(Role.USER, "USER")));
-//
-//        userService.addUserRole(userDataForTest, Role.USER);
-//
-//        assertNotNull(userDataForTest);
-//
-//        Role roleUser = new Role(Role.USER, "USER");
-//        assertTrue(userDataForTest.getRoles().contains(roleUser));
-//
-//        assertEquals("andrea", userDataForTest.getUsername());
-//        assertEquals("Andrea", userDataForTest.getName());
-//        assertEquals("Giassi", userDataForTest.getSurname());
-//        assertTrue(userDataForTest.isEnabled());
-//
-//        assertNotNull(userDataForTest.getContact());
-//        assertEquals("andrea.test@gmail.com", userDataForTest.getContact().getEmail());
-//        assertEquals("+3531122334455", userDataForTest.getContact().getPhone());
-//    }
+
+        userDataForTest.setRole(Role.APPLICANT);
+
+        assertNotNull(userDataForTest);
+
+        Role roleApplicant = Role.APPLICANT;
+        assertEquals(roleApplicant, userDataForTest.getRole());
+
+        assertEquals("andrea", userDataForTest.getUsername());
+        assertEquals("Andrea", userDataForTest.getName());
+        assertEquals("Giassi", userDataForTest.getSurname());
+
+        assertNotNull(userDataForTest.getContact());
+        assertEquals("andrea.test@gmail.com", userDataForTest.getContact().getEmail());
+        assertEquals("+3531122334455", userDataForTest.getContact().getPhoneNumber());
+    }
 
     @Test(expected = InvalidUserDataException.class)
     public void given_invalid_CreateOrUpdateUserDTO_when_createUser_throw_InvalidUserDataException() {
@@ -266,7 +265,6 @@ public class UserServiceTest {
                 .gender("MALE")
                 .username("marco")
                 .phoneNumber("+3531122334466")
-//                .enabled(true)
                 .build();
 
         User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
@@ -280,6 +278,11 @@ public class UserServiceTest {
     @Test(expected = InvalidGenderException.class)
     public void given_invalid_gender_string_when_getValidGender_throw_InvalidUserGenderException() {
         Gender.getValidGender("WRONG_GENDER");
+    }
+
+    @Test(expected = InvalidGenderException.class)
+    public void given_invalid_role_string_when_getValidRole_throw_InvalidUserRoleException() {
+        Role.getValidRole("WRONG_Role");
     }
 
     @Test
@@ -323,7 +326,6 @@ public class UserServiceTest {
                 .gender("MALE")
                 .username("andrea")
                 .phoneNumber("+3531122334466")
-//                .enabled(true)
                 .build();
 
         User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
@@ -348,7 +350,6 @@ public class UserServiceTest {
                 .username("marco")
                 .password("Test!123")
                 .phoneNumber("+3531122334466")
-//                .enabled(true)
                 .build();
 
         User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
@@ -370,10 +371,10 @@ public class UserServiceTest {
                 .surname("Giassi")
                 .email("andrea.test@gmail.com")
                 .gender("MALE")
+                .role("APPLICANT")
                 .username("andrea")
                 .password("Test!123")
                 .phoneNumber("+3539988776655")
-//                .enabled(true)
                 .address("via roma 3").city("Rome").country("Italy").zipCode("00100")
                 .build();
 
@@ -395,152 +396,5 @@ public class UserServiceTest {
     public void given_not_existing_userId_when_deleteUserById_throw_UserNotFoundException() {
         userService.deleteUserById(1L);
     }
-
-//    @Test(expected = InvalidLoginException.class)
-//    public void given_null_username_and_null_password_when_login_throw_InvalidLoginException() {
-//        userService.login(null, null);
-//    }
-
-//    @Test(expected = InvalidLoginException.class)
-//    public void given_null_username_login_when_login_throw_InvalidLoginException() {
-//        userService.login(null, "WRONG_PWD");
-//    }
-
-//    @Test(expected = InvalidLoginException.class)
-//    public void given_null_password_login_when_login_throw_InvalidLoginException() {
-//        userService.login("WRONG", null);
-//    }
-
-//    @Test(expected = InvalidLoginException.class)
-//    public void given_invalid_login_when_login_throw_InvalidLoginException() {
-//        userService.login("WRONG", "WRONG_PWD");
-//    }
-
-//    @Test
-//    public void given_valid_login_when_login_return_User() {
-//        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-//                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-//
-//        given(userRepository.findByUsername("andrea")).willReturn(userDataForTest);
-//
-//        User user = userService.login("andrea", UserTestHelper.TEST_PASSWORD_DECRYPTED);
-//
-//        assertNotNull(user);
-//        assertEquals("andrea", user.getUsername());
-//    }
-
-//    @Test(expected = InvalidLoginException.class)
-//    public void given_invalid_login2_when_login_throw_InvalidLoginException() {
-//        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-//                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-//
-//        given(userRepository.findByUsername("andrea")).willReturn(userDataForTest);
-//
-//        User user = userService.login("andrea", "WRONG_PWD");
-//    }
-
-//    @Test(expected = InvalidLoginException.class)
-//    public void given_not_enabled_login_when_login_throw_InvalidLoginException() {
-//        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-//                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-//
-//        userDataForTest.setEnabled(false);
-//
-//        given(userRepository.findByUsername("andrea")).willReturn(userDataForTest);
-//
-//        User user = userService.login("andrea", UserTestHelper.TEST_PASSWORD_DECRYPTED);
-//    }
-
-    // tests add role on User
-//    @Test(expected = UserNotFoundException.class)
-//    public void given_notExistingUserId_when_addRole_throw_UserNotFoundException() {
-//        User user = userService.addRole(99L, 2L);
-//    }
-
-//    @Test(expected = RoleNotFoundException.class)
-//    public void given_existingUserId_notExistingRoleId_when_addRole_throw_RoleNotFoundException() {
-//        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-//                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-//
-//        given(userRepository.findById(1L)).willReturn(Optional.of(userDataForTest));
-//
-//        userService.setUserRole(userDataForTest, Role.NECO);
-//    }
-
-    @Test
-    public void given_validUserAndRoleIds_when_addRole_returnUser() {
-        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-
-        given(userRepository.findById(1L)).willReturn(Optional.of(userDataForTest));
-
-        Role roleHeadhunter = Role.HEADHUNTER;
-
-//        given(roleRepository.findById(2L)).willReturn(Optional.of(roleHeadhunter));
-
-//        userService.setUserRole(userDataForTest, roleHeadhunter);
-
-//        assertNotNull(user);
-
-        // check the new added role
-//        Set<Role> roleSet = user.getRoles();
-
-        assertEquals(userService.getUserById(1L).getRole(), roleHeadhunter);
-
-//        assertNotNull(roleSet);
-//        assertEquals(2, roleSet.size());
-//        assertTrue(roleSet.contains(roleAdmin));
-    }
-
-    // test remove role from User
-//    @Test(expected = UserNotFoundException.class)
-//    public void given_notExistingUserId_when_removeRole_throw_UserNotFoundException() {
-//        User user = userService.removeRole(99L, 2L);
-//    }
-
-//    @Test(expected = RoleNotFoundException.class)
-//    public void given_existingUserId_notExistingRoleId_when_removeRole_throw_RoleNotFoundException() {
-//        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-//                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-//
-//        given(userRepository.findById(1L)).willReturn(Optional.of(userDataForTest));
-//
-//        userService.removeRole(1L, 99L);
-//    }
-
-//    @Test
-//    public void given_validUserAndRoleIds_when_removeRole_returnUser() {
-//        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-//                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-//
-//        Role roleAdmin = new Role(Role.ADMINISTRATOR, "Administrator");
-//        userDataForTest.getRoles().add(roleAdmin);
-//
-//        given(userRepository.findById(1L)).willReturn(Optional.of(userDataForTest));
-//        given(roleRepository.findById(2L)).willReturn(Optional.of(roleAdmin));
-//
-//        User user = userService.removeRole(1L, 2L);
-//
-//        assertNotNull(user);
-//
-//        // check the remove role
-//        Set<Role> roleSet = user.getRoles();
-//
-//        assertNotNull(roleSet);
-//        assertEquals(1, roleSet.size());
-//        assertTrue(!roleSet.contains(roleAdmin));
-//    }
-
-//    @Test(expected = UserIsSecuredException.class)
-//    public void given_validSecuredUser_when_deleteUser_throw_UserIsSecuredException() {
-//        User userDataForTest = getUserTestData(1L, "andrea", "Andrea",
-//                "Giassi", "andrea.test@gmail.com", "+3531122334455");
-//        // set a secure user
-//        userDataForTest.setSecured(true);
-//
-//        given(userRepository.findById(1L)).willReturn(Optional.of(userDataForTest));
-//
-//        userService.deleteUserById(1L);
-//    }
 
 }

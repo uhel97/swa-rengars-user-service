@@ -35,6 +35,7 @@ public class RegisterRestControllerTest {
                 .name("Marco")
                 .surname("Violet")
                 .gender("MALE")
+                .role("APPLICANT")
                 .email("marco.violet@gmail.com")
                 .build();
 
@@ -52,6 +53,7 @@ public class RegisterRestControllerTest {
         assertEquals("Marco", userDTO.getName());
         assertEquals("Violet", userDTO.getSurname());
         assertEquals("MALE", userDTO.getGender());
+        assertEquals("APPLICANT", userDTO.getRole());
 
         assertNotNull(userDTO.getContactDTO());
         assertEquals("marco.violet@gmail.com", userDTO.getContactDTO().getEmail());

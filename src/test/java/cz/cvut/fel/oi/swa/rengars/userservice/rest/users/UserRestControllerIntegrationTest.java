@@ -58,17 +58,17 @@ public class UserRestControllerIntegrationTest {
                 .andExpect(jsonPath("$.userList[0].surname").value("Giassi"))
                 .andExpect(jsonPath("$.userList[0].contactDTO.email").value("andrea.test@gmail.com"))
                 .andExpect(jsonPath("$.userList[0].username").value("andrea"))
-                .andExpect(jsonPath("$.userList[0].contactDTO.phone").value("+3531122334455"))
+                .andExpect(jsonPath("$.userList[0].contactDTO.phoneNumber").value("+3531122334455"))
                 .andExpect(jsonPath("$.userList[1].name").value("Marco"))
                 .andExpect(jsonPath("$.userList[1].surname").value("Verdi"))
                 .andExpect(jsonPath("$.userList[1].contactDTO.email").value("marco.test@gmail.com"))
                 .andExpect(jsonPath("$.userList[1].username").value("marco"))
-                .andExpect(jsonPath("$.userList[1].contactDTO.phone").value("+3531122334466"))
+                .andExpect(jsonPath("$.userList[1].contactDTO.phoneNumber").value("+3531122334466"))
                 .andExpect(jsonPath("$.userList[2].name").value("Franco"))
                 .andExpect(jsonPath("$.userList[2].surname").value("Rossi"))
                 .andExpect(jsonPath("$.userList[2].contactDTO.email").value("franco.test@gmail.com"))
                 .andExpect(jsonPath("$.userList[2].username").value("franco"))
-                .andExpect(jsonPath("$.userList[2].contactDTO.phone").value("+3531122334477"));
+                .andExpect(jsonPath("$.userList[2].contactDTO.phoneNumber").value("+3531122334477"));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class UserRestControllerIntegrationTest {
                 .andExpect(jsonPath("contactDTO.email").value("andrea.test@gmail.com"))
                 .andExpect(jsonPath("username").value("andrea"))
                 .andExpect(jsonPath("birthDate").value("1977-08-14"))
-                .andExpect(jsonPath("contactDTO.phone").value("+3531122334455"));
+                .andExpect(jsonPath("contactDTO.phoneNumber").value("+3531122334455"));
     }
 
 }

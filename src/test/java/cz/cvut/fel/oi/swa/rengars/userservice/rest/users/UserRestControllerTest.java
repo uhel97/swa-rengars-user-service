@@ -57,7 +57,6 @@ public class UserRestControllerTest {
         assertThat(userDTO.getName(), equalTo("Andrea"));
         assertThat(userDTO.getSurname(), equalTo("Test"));
         assertThat(userDTO.getContactDTO().getEmail(), equalTo("andrea.test@gmail.com"));
-//        assertThat(userDTO.isEnabled(), equalTo(true));
     }
 
     @Test
@@ -68,15 +67,10 @@ public class UserRestControllerTest {
                .name("Frank")
                .surname("Blu")
                .gender("MALE")
-//               .enabled(true)
-//               .note("created for test")
+               .role("APPLICANT")
                .email("frank.blu@gmail.com")
                .phoneNumber("+3531194334455")
-//               .skype("skype")
-//               .facebook("facebook")
                .linkedin("linkedin")
-//               .website("www.test.com")
-//               .contactNote("Test on contact")
                .address("dark road 1")
                .address2("salt hill")
                .city("Dublin")
@@ -99,23 +93,13 @@ public class UserRestControllerTest {
         assertEquals("Frank", userDTO.getName());
         assertEquals("Blu", userDTO.getSurname());
         assertEquals("MALE", userDTO.getGender());
-
-//        List<String> roles = userDTO.getRoles();
-//        assertNotNull(roles);
-//        assertTrue(roles.contains("USER"));
-
-//        assertEquals(true, userDTO.isEnabled());
-//        assertEquals("created for test", userDTO.getNote());
+        assertEquals("APPLICANT", userDTO.getRole());
 
         ContactDTO contactDTO = userDTO.getContactDTO();
 
         assertEquals("frank.blu@gmail.com", contactDTO.getEmail());
         assertEquals("+3531194334455", contactDTO.getPhoneNumber());
-//        assertEquals("skype", contactDTO.getSkype());
-//        assertEquals("facebook", contactDTO.getFacebook());
         assertEquals("linkedin", contactDTO.getLinkedin());
-//        assertEquals("www.test.com", contactDTO.getWebsite());
-//        assertEquals("Test on contact", contactDTO.getContactNote());
 
         assertNotNull(userDTO.getAddressDTO());
         AddressDTO addressDTO = userDTO.getAddressDTO();
@@ -138,6 +122,7 @@ public class UserRestControllerTest {
                 .name("Anna")
                 .surname("Verdi")
                 .gender("FEMALE")
+                .role("APPLICANT")
                 .email("anna.verdi@gmail.com")
                 .build();
 
@@ -160,15 +145,10 @@ public class UserRestControllerTest {
                 .name("Anna")
                 .surname("Verdi")
                 .gender("FEMALE")
-//                .enabled(true)
-//                .note("updated for test")
+                .role("HEADHUNTER")
                 .email("anna.verdi@gmail.com")
                 .phoneNumber("+3531194334455")
-//                .skype("skype")
-//                .facebook("facebook")
                 .linkedin("linkedin")
-//                .website("www.test.com")
-//                .contactNote("Test on contact")
                 .address("The sunny road 15")
                 .address2("Sunny valley")
                 .city("Dublin")
@@ -186,13 +166,7 @@ public class UserRestControllerTest {
         assertEquals("Anna", userUpdatedDTO.getName());
         assertEquals("Verdi", userUpdatedDTO.getSurname());
         assertEquals("FEMALE", userUpdatedDTO.getGender());
-//        assertEquals(true, userUpdatedDTO.isEnabled());
-
-        // role
-//        assertNotNull(userUpdatedDTO.getRoles());
-//        assertTrue(userUpdatedDTO.getRoles().contains( "USER"));
-
-//        assertEquals("updated for test", userUpdatedDTO.getNote());
+        assertEquals("HEADHUNTER", userUpdatedDTO.getRole());
 
         // contact
         ContactDTO contactDTO = userUpdatedDTO.getContactDTO();
@@ -200,11 +174,7 @@ public class UserRestControllerTest {
 
         assertEquals("anna.verdi@gmail.com", contactDTO.getEmail());
         assertEquals("+3531194334455", contactDTO.getPhoneNumber());
-//        assertEquals("skype", contactDTO.getSkype());
-//        assertEquals("facebook", contactDTO.getFacebook());
         assertEquals("linkedin", contactDTO.getLinkedin());
-//        assertEquals("www.test.com", contactDTO.getWebsite());
-//        assertEquals("Test on contact", contactDTO.getContactNote());
 
         // address
         assertNotNull(userUpdatedDTO.getAddressDTO());
@@ -227,174 +197,7 @@ public class UserRestControllerTest {
                 .name("Anna2")
                 .surname("Verdi")
                 .gender("FEMALE")
-                .email("anna2.verdi@gmail.com")
-                .build();
-
-        String registerAccountURL = "/users/register";
-        HttpEntity<RegisterUserAccountDTO> request = new HttpEntity<>(quickAccount);
-        ResponseEntity<UserDTO> response = restTemplate.postForEntity(registerAccountURL, request, UserDTO.class);
-
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
-        UserDTO userDTO = response.getBody();
-
-        assertNotNull(userDTO);
-
-        // call the delete endpoint
-        String deleteUserURL = "/users/" + userDTO.getId();
-        restTemplate.delete(deleteUserURL);
-
-        // retrieve a not existing user must to be empty response
-        Optional<User> userOpt = userRepository.findById(userDTO.getId());
-        assertFalse(userOpt.isPresent());
-    }
-
-    // test add role on User
-    @Test
-    public void test_addRoleOnUser() {
-        // create a new user
-        RegisterUserAccountDTO registerUserAccountDTO = RegisterUserAccountDTO.builder()
-                .username("anna")
-                .password("Anna!123")
-                .name("Anna")
-                .surname("Verdi")
-                .gender("FEMALE")
-                .email("anna.verdi@gmail.com")
-                .build();
-
-        String registerAccountURL = "/users/register";
-        HttpEntity<RegisterUserAccountDTO> requestCreate = new HttpEntity<>(registerUserAccountDTO);
-        ResponseEntity<UserDTO> responseCreate = restTemplate.postForEntity(registerAccountURL, requestCreate, UserDTO.class);
-
-        assertThat(responseCreate.getStatusCode(), equalTo(HttpStatus.CREATED));
-        UserDTO userDTO = responseCreate.getBody();
-
-        assertNotNull(userDTO);
-
-        // test the add role
-        Long userId = userDTO.getId();
-        URI uri = URI.create("/users/" + userId + "/roles/" + Role.APPLICANT);
-        ResponseEntity<UserDTO> response = restTemplate.exchange(uri, HttpMethod.POST, null, UserDTO.class);
-
-        assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
-
-        UserDTO addedRoleOnUserDTO = response.getBody();
-
-        assertEquals("anna", addedRoleOnUserDTO.getUsername());
-        assertEquals("Anna", addedRoleOnUserDTO.getName());
-        assertEquals("Verdi", addedRoleOnUserDTO.getSurname());
-        assertEquals("FEMALE", addedRoleOnUserDTO.getGender());
-//        assertEquals(true, addedRoleOnUserDTO.isEnabled());
-
-        // check the role list
-//        assertNotNull(addedRoleOnUserDTO.getRoles());
-//        assertEquals(2L, addedRoleOnUserDTO.getRoles().size());
-//        assertTrue(addedRoleOnUserDTO.getRoles().contains("USER"));
-//        assertTrue(addedRoleOnUserDTO.getRoles().contains("ADMINISTRATOR"));
-
-        // delete the user
-        userService.deleteUserById(addedRoleOnUserDTO.getId());
-    }
-
-    @Test
-    public void test_addRoleOnUser_wrongUserId() {
-        // perform add role ADMINISTRATOR on not existing user
-        Long userId = 99L; // not existing user
-        URI uri = URI.create("/users/" + userId + "/roles/" + Role.HEADHUNTER);
-        ResponseEntity<UserDTO> removeResponse = restTemplate.exchange(uri, HttpMethod.POST, null, UserDTO.class);
-
-        assertThat(removeResponse.getStatusCode(), is(HttpStatus.NOT_FOUND));
-    }
-
-    @Test
-    public void test_addRoleOnUser_wrongRoleId() {
-        // perform add role with not existing role
-        URI uri = URI.create("/users/" + 1L + "/roles/" + 99L);
-        ResponseEntity<UserDTO> removeResponse = restTemplate.exchange(uri, HttpMethod.POST, null, UserDTO.class);
-
-        assertThat(removeResponse.getStatusCode(), is(HttpStatus.NOT_FOUND));
-    }
-
-    @Test
-    public void test_removeRoleOnUser() {
-        // create a new user
-        RegisterUserAccountDTO registerUserAccountDTO = RegisterUserAccountDTO.builder()
-                .username("anna")
-                .password("Anna!123")
-                .name("Anna")
-                .surname("Verdi")
-                .gender("FEMALE")
-                .email("anna.verdi@gmail.com")
-                .build();
-
-        String registerAccountURL = "/users/register";
-        HttpEntity<RegisterUserAccountDTO> requestCreate = new HttpEntity<>(registerUserAccountDTO);
-        ResponseEntity<UserDTO> responseCreate = restTemplate.postForEntity(registerAccountURL, requestCreate, UserDTO.class);
-
-        assertThat(responseCreate.getStatusCode(), equalTo(HttpStatus.CREATED));
-        UserDTO userDTO = responseCreate.getBody();
-
-        assertNotNull(userDTO);
-
-        // test the add role
-        Long userId = userDTO.getId();
-        URI uri = URI.create("/users/" + userId + "/roles/" + Role.HEADHUNTER);
-        ResponseEntity<UserDTO> response = restTemplate.exchange(uri, HttpMethod.POST, null, UserDTO.class);
-
-        assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
-
-        UserDTO addedRoleOnUserDTO = response.getBody();
-
-        // check the role list
-//        assertNotNull(addedRoleOnUserDTO.getRoles());
-//        assertEquals(2L, addedRoleOnUserDTO.getRoles().size());
-//        assertTrue(addedRoleOnUserDTO.getRoles().contains("USER"));
-//        assertTrue(addedRoleOnUserDTO.getRoles().contains("ADMINISTRATOR"));
-
-        // perform the remove role ADMIN
-        uri = URI.create("/users/" + userId + "/roles/" + Role.HEADHUNTER);
-        ResponseEntity<UserDTO> removeResponse = restTemplate.exchange(uri, HttpMethod.DELETE, null, UserDTO.class);
-
-        assertThat(removeResponse.getStatusCode(), is(HttpStatus.OK));
-
-        UserDTO removedRoleOnUserDTO = removeResponse.getBody();
-
-        // check the role list
-//        assertNotNull(removedRoleOnUserDTO.getRoles());
-//        assertEquals(1L, removedRoleOnUserDTO.getRoles().size());
-//        assertTrue(removedRoleOnUserDTO.getRoles().contains("USER"));
-
-        // delete the user
-        userService.deleteUserById(removedRoleOnUserDTO.getId());
-    }
-
-    @Test
-    public void test_removeRoleOnUser_wrongUserId() {
-        // perform the remove role ADMINISTRATOR on not existing user
-        Long userId = 99L; // not existing user
-        URI uri = URI.create("/users/" + userId + "/roles/" + Role.HEADHUNTER);
-        ResponseEntity<UserDTO> removeResponse = restTemplate.exchange(uri, HttpMethod.DELETE, null, UserDTO.class);
-
-        assertThat(removeResponse.getStatusCode(), is(HttpStatus.NOT_FOUND));
-    }
-
-    @Test
-    public void test_removeRoleOnUser_wrongRoleId() {
-        // perform the remove not existing role
-        URI uri = URI.create("/users/" + 1L + "/roles/" + 99L);
-        ResponseEntity<UserDTO> removeResponse = restTemplate.exchange(uri, HttpMethod.DELETE, null, UserDTO.class);
-
-        assertThat(removeResponse.getStatusCode(), is(HttpStatus.NOT_FOUND));
-    }
-
-    @Test
-    public void test_delete_securedUser_return_BAD_REQUEST() {
-        // create a new user to test the deletion
-        RegisterUserAccountDTO quickAccount = RegisterUserAccountDTO.builder()
-                .username("anna2")
-                .password("Anna2!123")
-                .name("Anna2")
-                .surname("Verdi")
-                .gender("FEMALE")
+                .role("APPLICANT")
                 .email("anna2.verdi@gmail.com")
                 .build();
 

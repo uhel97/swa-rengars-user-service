@@ -18,7 +18,7 @@ CREATE TABLE `users` (
 CREATE TABLE `contacts` (
   user_id BIGINT(20) NOT NULL PRIMARY KEY,
   `email` varchar(255) NOT NULL UNIQUE,
-  `phoneNumber` varchar(20) DEFAULT NULL,
+  `phone_number` varchar(20) DEFAULT NULL,
   linkedin varchar(255) DEFAULT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id)
 );

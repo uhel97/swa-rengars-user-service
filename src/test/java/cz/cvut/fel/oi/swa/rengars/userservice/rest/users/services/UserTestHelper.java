@@ -6,7 +6,7 @@ import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.entities.Gender;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.entities.Role;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.entities.User;
 
-//import java.time.LocalDateTime;
+import java.time.LocalDateTime;
 //import java.util.HashSet;
 //import java.util.Set;
 
@@ -33,11 +33,8 @@ public class UserTestHelper {
 
         user.setContact(contact);
 
-//        user.setEnabled(true);
-
-//        user.setCreationDt(LocalDateTime.of(2020, 2, 1, 12, 30));
-//        user.setUpdatedDt(LocalDateTime.of(2020, 2, 1, 16, 45));
-//        user.setLoginDt(null);
+        user.setCreatedAt(LocalDateTime.of(2020, 2, 1, 12, 30));
+        user.setUpdatedAt(LocalDateTime.of(2020, 2, 1, 16, 45));
 
         // add the USER role
         user.setRole(Role.APPLICANT);

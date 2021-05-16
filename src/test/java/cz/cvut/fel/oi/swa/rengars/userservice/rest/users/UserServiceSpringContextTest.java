@@ -39,6 +39,7 @@ public class UserServiceSpringContextTest {
         registerUserAccountDTO.setSurname("Rossi");
         registerUserAccountDTO.setEmail("marco.test@gmail.com");
         registerUserAccountDTO.setGender("MALE");
+        registerUserAccountDTO.setRole("HEADHUNTER");
         registerUserAccountDTO.setUsername("marco");
         registerUserAccountDTO.setPassword("Test!123");
 
@@ -49,6 +50,7 @@ public class UserServiceSpringContextTest {
         assertEquals("Rossi", createdUser.getSurname());
         assertEquals("marco.test@gmail.com", createdUser.getContact().getEmail());
         assertEquals("MALE", createdUser.getGender().name());
+        assertEquals("HEADHUNTER", createdUser.getRole().name());
         assertEquals("marco", createdUser.getUsername());
 
         assertTrue(EncryptionService.isPasswordValid("Test!123", createdUser.getPassword(),
@@ -129,7 +131,7 @@ public class UserServiceSpringContextTest {
         assertEquals("+35344335522", updatedUser.getContact().getPhoneNumber());
 
         Role applicantRole = Role.APPLICANT;
-        assertEquals(updateUserDTO.getRole(), applicantRole);
+        assertEquals(Role.getValidRole(updateUserDTO.getRole()), applicantRole);
 
 //        assertEquals("update phone number note", updatedUser.getNote());
         // check on address

@@ -47,9 +47,8 @@ public class UserRestController {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
-    
-    @GetMapping("/{role}")
-    public ResponseEntity<UserListDTO> getUsersListByRole(@PathVariable("role") String role) {
+
+    public ResponseEntity<UserListDTO> getUsersListByRole(String role) {
         List<UserDTO> list = userService.getUsersList();
         UserListDTO userListDTO = new UserListDTO();
         list.stream().filter((user) -> (Objects.equals(user.getRole(), role))).forEachOrdered((user) -> {
