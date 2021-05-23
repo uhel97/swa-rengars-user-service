@@ -3,8 +3,10 @@ package cz.cvut.fel.oi.swa.rengars.userservice.rest;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.UserDTO;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.UserListDTO;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.requests.CreateOrUpdateUserDTO;
+import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.services.RabbitMQSender;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,14 @@ public class UserRestController {
 
     @Autowired
     private UserService userService;
+    private RabbitMQSender rabbitMqSender;
+
+    @Autowired
+    public UserRestController(RabbitMQSender rabbitMqSender) {
+        this.rabbitMqSender = rabbitMqSender;
+    }
+    @Value("${app.message}")
+    private String message;
 
     @GetMapping
     public ResponseEntity<UserListDTO> getUsersList() {
@@ -27,9 +37,15 @@ public class UserRestController {
         return ResponseEntity.ok(userListDTO);
     }
 
+//    @PostMapping
+//    public ResponseEntity<UserDTO> createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) {
+//        return new ResponseEntity(new UserDTO(userService.createUser(createOrUpdateUserDTO)), null, HttpStatus.CREATED);
+//    }
+
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) {
-        return new ResponseEntity(new UserDTO(userService.createUser(createOrUpdateUserDTO)), null, HttpStatus.CREATED);
+    public String createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) {
+        rabbitMqSender.send(new UserDTO(userService.createUser(createOrUpdateUserDTO)));
+        return message;
     }
 
     @GetMapping("/{id}")
