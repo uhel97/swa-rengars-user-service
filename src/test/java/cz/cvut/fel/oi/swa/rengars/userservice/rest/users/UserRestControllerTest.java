@@ -59,59 +59,60 @@ public class UserRestControllerTest {
         assertThat(userDTO.getContactDTO().getEmail(), equalTo("andrea.test@gmail.com"));
     }
 
-    @Test
-    public void test_createUser() {
-        CreateOrUpdateUserDTO createOrUpdateUserDTO = CreateOrUpdateUserDTO.builder()
-               .username("frank")
-               .password("Frank!123")
-               .name("Frank")
-               .surname("Blu")
-               .gender("MALE")
-               .role("APPLICANT")
-               .email("frank.blu@gmail.com")
-               .phoneNumber("+3531194334455")
-               .linkedin("linkedin")
-               .address("dark road 1")
-               .address2("salt hill")
-               .city("Dublin")
-               .country("Ireland")
-               .zipCode("47335")
-               .build();
-
-        URI uri = URI.create("/users");
-
-        HttpEntity<CreateOrUpdateUserDTO> request = new HttpEntity<>(createOrUpdateUserDTO);
-        ResponseEntity<UserDTO> response = restTemplate.postForEntity(uri, request, UserDTO.class);
-
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
-
-        UserDTO userDTO = response.getBody();
-        assertNotNull(userDTO);
-
-        assertNotNull(userDTO);
-        assertEquals("frank", userDTO.getUsername());
-        assertEquals("Frank", userDTO.getName());
-        assertEquals("Blu", userDTO.getSurname());
-        assertEquals("MALE", userDTO.getGender());
-        assertEquals("APPLICANT", userDTO.getRole());
-
-        ContactDTO contactDTO = userDTO.getContactDTO();
-
-        assertEquals("frank.blu@gmail.com", contactDTO.getEmail());
-        assertEquals("+3531194334455", contactDTO.getPhoneNumber());
-        assertEquals("linkedin", contactDTO.getLinkedin());
-
-        assertNotNull(userDTO.getAddressDTO());
-        AddressDTO addressDTO = userDTO.getAddressDTO();
-        assertEquals("dark road 1", addressDTO.getAddress());
-        assertEquals("salt hill", addressDTO.getAddress2());
-        assertEquals("Dublin", addressDTO.getCity());
-        assertEquals("Ireland", addressDTO.getCountry());
-        assertEquals("47335", addressDTO.getZipCode());
-
-        // delete the created user
-        userService.deleteUserById(userDTO.getId());
-    }
+//    @Test
+//    public void test_createUser() {
+//        CreateOrUpdateUserDTO createOrUpdateUserDTO = CreateOrUpdateUserDTO.builder()
+//               .username("frank")
+//               .password("Frank!123")
+//               .name("Frank")
+//               .surname("Blu")
+//               .gender("MALE")
+//               .role("APPLICANT")
+//               .email("frank.blu@gmail.com")
+//               .phoneNumber("+3531194334455")
+//               .linkedin("linkedin")
+//               .address("dark road 1")
+//               .address2("salt hill")
+//               .city("Dublin")
+//               .country("Ireland")
+//               .zipCode("47335")
+//               .build();
+//
+//        URI uri = URI.create("/users");
+//
+//        HttpEntity<CreateOrUpdateUserDTO> request = new HttpEntity<>(createOrUpdateUserDTO);
+//        ResponseEntity<UserDTO> response = restTemplate.postForEntity(uri, request, UserDTO.class);
+//
+//
+//        assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
+//
+//        UserDTO userDTO = response.getBody();
+//        assertNotNull(userDTO);
+//
+//        assertNotNull(userDTO);
+//        assertEquals("frank", userDTO.getUsername());
+//        assertEquals("Frank", userDTO.getName());
+//        assertEquals("Blu", userDTO.getSurname());
+//        assertEquals("MALE", userDTO.getGender());
+//        assertEquals("APPLICANT", userDTO.getRole());
+//
+//        ContactDTO contactDTO = userDTO.getContactDTO();
+//
+//        assertEquals("frank.blu@gmail.com", contactDTO.getEmail());
+//        assertEquals("+3531194334455", contactDTO.getPhoneNumber());
+//        assertEquals("linkedin", contactDTO.getLinkedin());
+//
+//        assertNotNull(userDTO.getAddressDTO());
+//        AddressDTO addressDTO = userDTO.getAddressDTO();
+//        assertEquals("dark road 1", addressDTO.getAddress());
+//        assertEquals("salt hill", addressDTO.getAddress2());
+//        assertEquals("Dublin", addressDTO.getCity());
+//        assertEquals("Ireland", addressDTO.getCountry());
+//        assertEquals("47335", addressDTO.getZipCode());
+//
+//        // delete the created user
+//        userService.deleteUserById(userDTO.getId());
+//    }
 
     @Test
     public void test_updateUser() {
