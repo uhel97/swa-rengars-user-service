@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  users:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USERS_PORT: ${USERS_PORT}
+    container_name: users
+    image: openjdk:11-jdk-alpine
+    ports:
+      - "${USERS_PORT}:${USERS_PORT}"
+    depends_on:
+      - mysql
+    volumes:
+      - ./:/users
+    networks:
+      - users_user
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    expose:
+      - ${MYSQL_PORT}
+    command: --init-file ./src/main/resources/db_create.sql --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - users_user
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
