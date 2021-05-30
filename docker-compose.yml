@@ -9,20 +9,35 @@ services:
         USERS_PORT: ${USERS_PORT}
     container_name: users
     image: openjdk:11-jdk-alpine
+    environment:
+      EUREKA_URL: "${EUREKA_HOST}:${EUREKA_PORT}"
+      RABBIT_MQ_HOST: ${RABBIT_MQ_HOST}
+      RABBIT_MQ_PORT: ${RABBIT_MQ_PORT}
+      RABBIT_MQ_EXCHANGE: ${RABBIT_MQ_EXCHANGE}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_HOSTNAME: ${MYSQL_HOSTNAME}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      APP_ENV: ${APP_ENV}
     ports:
       - "${USERS_PORT}:${USERS_PORT}"
     depends_on:
       - mysql
+      - rabbitmq
     volumes:
       - ./:/users
     networks:
       - users_user
-    restart: unless-stopped
+      - rengars_eureka
+      - rengars_rabbit_wq
+    restart: on-failure
 
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     expose:
       - ${MYSQL_PORT}
     command: --init-file ./src/main/resources/db_create.sql --default-authentication-plugin=mysql_native_password
@@ -32,5 +47,40 @@ services:
       - users_user
     restart: unless-stopped
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: swa_rabbit_mq
+    networks:
+      - rengars_rabbit_mq
+    expose:
+      - ${RABBIT_MQ_PORT}
+    ports:
+      - 15672:15672
+    restart: on-failure
+
+  eureka:
+    build:
+      context: ./rengars_eureka
+      dockerfile: Dockerfile
+    container_name: eureka
+    networks:
+      - rengars_eureka
+    ports:
+      - "${EUREKA_PORT}:${EUREKA_PORT}"
+    restart: on-failure
+
+networks:
+  mysql_db_admin:
+    driver: bridge
+  users_user:
+    driver: bridge
+  rengars_eureka:
+    driver: bridge
+  rengars_rabbit_mq:
+    driver: bridge
+
 volumes:
-  mysql_data:
+  mysqldata:
+    driver: local
+  usersdata:
+    driver: local

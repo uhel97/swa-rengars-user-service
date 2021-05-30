@@ -37,15 +37,11 @@ public class UserRestController {
         return ResponseEntity.ok(userListDTO);
     }
 
-//    @PostMapping
-//    public ResponseEntity<UserDTO> createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) {
-//        return new ResponseEntity(new UserDTO(userService.createUser(createOrUpdateUserDTO)), null, HttpStatus.CREATED);
-//    }
-
     @PostMapping
-    public String createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) {
-        rabbitMqSender.send(new UserDTO(userService.createUser(createOrUpdateUserDTO)));
-        return message;
+    public ResponseEntity<UserDTO> createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) {
+        rabbitMqSender.send(createOrUpdateUserDTO);
+        ResponseEntity<UserDTO> result = new ResponseEntity(new UserDTO(userService.createUser(createOrUpdateUserDTO)), null, HttpStatus.CREATED);
+        return result;
     }
 
     @GetMapping("/{id}")
