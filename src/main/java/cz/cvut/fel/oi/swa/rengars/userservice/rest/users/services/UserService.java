@@ -167,9 +167,9 @@ public class UserService {
 
         checkIfUsernameNotUsed(createUserDTO.getUsername());
         checkIfEmailNotUsed(createUserDTO.getEmail());
-        passwordValidator.checkPassword(createUserDTO.getPassword());
-        emailValidator.checkEmail(createUserDTO.getEmail());
-        phoneValidator.checkPhone(createUserDTO.getPhoneNumber());
+//        passwordValidator.checkPassword(createUserDTO.getPassword());
+//        emailValidator.checkEmail(createUserDTO.getEmail());
+//        phoneValidator.checkPhone(createUserDTO.getPhoneNumber());
 
         // create the user
         User user = new User();
@@ -259,9 +259,9 @@ public class UserService {
             }
         }
 
-        passwordValidator.checkPassword(updateUserDTO.getPassword());
-        emailValidator.checkEmail(updateUserDTO.getEmail());
-        phoneValidator.checkPhone(updateUserDTO.getPhoneNumber());
+//        passwordValidator.checkPassword(updateUserDTO.getPassword());
+//        emailValidator.checkEmail(updateUserDTO.getEmail());
+//        phoneValidator.checkPhone(updateUserDTO.getPhoneNumber());
 
         // check if the new email has not been registered yet
         User userEmail = getUserByEmail(updateUserDTO.getEmail());

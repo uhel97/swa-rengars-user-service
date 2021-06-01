@@ -1,0 +1,41 @@
+#spring:
+#  application:
+#    name: user-service
+#  rabbitmq:
+#    host: ${RABBIT_MQ_HOST}
+#    port: ${RABBIT_MQ_PORT}
+#    exchange: ${RABBIT_MQ_EXCHANGE}
+#    routingkey: user:routingkey
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${MYSQL_HOSTNAME}:${MYSQL_PORT}/${MYSQL_DATABASE}
+#    username: ${MYSQL_USERNAME}
+#    password: ${MYSQL_PASSWORD}
+#    testWhileIdle: true
+#    validationQuery: SELECT 1
+#    initialize: true
+#    initialization-mode: always
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+#        ddl-auto: none
+#    show-sql: false
+#
+#eureka:
+#  client:
+#    service-url:
+#      default-zone: http://${EUREKA_URL}/${EUREKA_HOST}
+#
+#app:
+#  message: Message has been sent Successfully..
+#
+#logging:
+#  group:
+#    rbac: com.giassi.microservice
+#  level:
+#    rbac: INFO
+#
+#microservice:
+#  security:
+#    salt: WZeBXmCI9cAz3LyY9Sdllj9l5iPsXC

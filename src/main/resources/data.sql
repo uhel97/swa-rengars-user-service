@@ -4,12 +4,12 @@ DELETE FROM users;
 
 INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (1, 'andrea', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Andrea', 'Test', 0, 1);
 INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (2, 'mario', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Mario', 'Rossi', 0, 1);
-INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (3, 'stefania', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Stefania', 'Verdi', 1, 2);
-INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (4, 'veronica', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Veronica', 'Gialli', 1, 2);
+INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (3, 'stefania', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Stefania', 'Verdi', 1, 0);
+INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (4, 'veronica', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Veronica', 'Gialli', 1, 0);
 INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (5, 'mark', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Mark', 'Green', 0, 1);
 INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (6, 'paul', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Paul', 'Ludwing', 0, 1);
 INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (7, 'jennifer', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Jennifer', 'Red', 0, 1);
-INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (8, 'karina', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Karina', 'Yellow', 1, 2);
+INSERT INTO users(id, username, password, name, surname, gender, role) VALUES (8, 'karina', '1d/NZaEqNgtEomytAPrwm/+QjmbudLg33oeEk77Xh88=', 'Karina', 'Yellow', 1, 0);
 
 UPDATE users SET birth_date = '1977-08-14' WHERE id = 1;
 
