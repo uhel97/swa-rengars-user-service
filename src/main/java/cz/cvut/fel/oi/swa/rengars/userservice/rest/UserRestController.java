@@ -19,15 +19,17 @@ import java.util.Objects;
 public class UserRestController {
 
     @Autowired
-    private UserService userService;
     private RabbitMQSender rabbitMqSender;
 
     @Autowired
-    public UserRestController(RabbitMQSender rabbitMqSender) {
-        this.rabbitMqSender = rabbitMqSender;
-    }
-    @Value("${app.message}")
-    private String message;
+    private UserService userService;
+
+//    @Autowired
+//    public UserRestController(RabbitMQSender rabbitMqSender) {
+//        this.rabbitMqSender = rabbitMqSender;
+//    }
+//    @Value("${app.message}")
+//    private String message;
 
     @GetMapping
     public ResponseEntity<UserListDTO> getUsersList() {

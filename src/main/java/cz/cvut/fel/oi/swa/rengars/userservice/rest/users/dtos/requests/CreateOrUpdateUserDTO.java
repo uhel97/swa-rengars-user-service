@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Component
 public class CreateOrUpdateUserDTO implements Serializable {
 
     private String username;
@@ -43,4 +45,24 @@ public class CreateOrUpdateUserDTO implements Serializable {
     // role inforamtion
     private String role;
 
+    @Override
+    public String toString() {
+        return "CreateOrUpdateUserDTO{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birthDate=" + birthDate +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", linkedin='" + linkedin + '\'' +
+                ", address='" + address + '\'' +
+                ", address2='" + address2 + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", role='" + role + '\'' +
+                '}';
+    }
 }

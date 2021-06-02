@@ -1,7 +1,7 @@
 package cz.cvut.fel.oi.swa.rengars.userservice.rest.users.services;
 
-import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.UserDTO;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.requests.CreateOrUpdateUserDTO;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +25,7 @@ public class RabbitMQSender {
 
     public void send(CreateOrUpdateUserDTO createOrUpdateUserDTO){
         rabbitTemplate.convertAndSend(exchange,routingkey, createOrUpdateUserDTO);
+//        System.out.println("Send msg = " + createOrUpdateUserDTO);
     }
 
 }

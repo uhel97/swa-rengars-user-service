@@ -3,8 +3,8 @@ version: '3'
 services:
   mysql:
     image: mysql:8.0.25
+    container_name: mysql
     environment:
-      MYSQL_HOSTNAME: ${MYSQL_HOSTNAME}
       MYSQL_USERNAME: ${MYSQL_USERNAME}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -16,30 +16,30 @@ services:
       - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/1.sql
       - mysqldata:/var/lib/mysql
     networks:
-      - users_user
-    restart: unless-stopped
-
+      - backend
+    restart: always
   eureka:
     build:
       context: ../rengars_eureka
       dockerfile: Dockerfile
+    container_name: eureka
+    restart: unless-stopped
     ports:
       - "${EUREKA_PORT}:${EUREKA_PORT}"
     networks:
-      - rengars_eureka
-    restart: on-failure
-
+      - backend
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3-management
     expose:
       - ${RABBIT_MQ_PORT}
     ports:
       - "15672:15672"
     networks:
-      - rengars_rabbit_mq
+      - backend
     restart: on-failure
-
   users:
+    container_name: users
     build:
       context: .
       dockerfile: Dockerfile
@@ -59,22 +59,20 @@ services:
       - "${USERS_PORT}:${USERS_PORT}"
     depends_on:
       - mysql
+      - eureka
       - rabbitmq
+    links:
+      - mysql
     volumes:
       - usersdata:/usr/src/users/
     networks:
-      - users_user
-      - rengars_eureka
-      - rengars_rabbit_mq
+      - backend
     restart: on-failure
 
 networks:
-  users_user:
+  backend:
     driver: bridge
-  rengars_eureka:
-    driver: bridge
-  rengars_rabbit_mq:
-    driver: bridge
+
 
 volumes:
   mysqldata:
