@@ -1,15 +1,50 @@
 version: '3'
 
 services:
+  mysql:
+    image: mysql:8.0.25
+    environment:
+      MYSQL_HOSTNAME: ${MYSQL_HOSTNAME}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PORT: ${MYSQL_PORT}
+    ports:
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/1.sql
+      - mysqldata:/var/lib/mysql
+    networks:
+      - users_user
+    restart: unless-stopped
+
+  eureka:
+    build:
+      context: ../rengars_eureka
+      dockerfile: Dockerfile
+    ports:
+      - "${EUREKA_PORT}:${EUREKA_PORT}"
+    networks:
+      - rengars_eureka
+    restart: on-failure
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    expose:
+      - ${RABBIT_MQ_PORT}
+    ports:
+      - "15672:15672"
+    networks:
+      - rengars_rabbit_mq
+    restart: on-failure
+
   users:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        USERS_PORT: ${USERS_PORT}
-    container_name: users
-    image: openjdk:11-jdk-alpine
     environment:
+      SERVER_PORT: ${USERS_PORT}
       EUREKA_URL: "${EUREKA_HOST}:${EUREKA_PORT}"
       RABBIT_MQ_HOST: ${RABBIT_MQ_HOST}
       RABBIT_MQ_PORT: ${RABBIT_MQ_PORT}
@@ -19,54 +54,18 @@ services:
       MYSQL_PORT: ${MYSQL_PORT}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      APP_ENV: ${APP_ENV}
     ports:
       - "${USERS_PORT}:${USERS_PORT}"
     depends_on:
       - mysql
       - rabbitmq
     volumes:
-      - ./:/users
+      - usersdata:/usr/src/users/
     networks:
       - users_user
       - rengars_eureka
       - rengars_rabbit_mq
-    restart: on-failure
-
-  mysql:
-    image: mysql:8.0.25
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-    ports:
-      - "${MYSQL_PORT}:${MYSQL_PORT}"
-    command: --default-authentication-plugin=mysql_native_password
-    volumes:
-      - ./src/main/resources/init.sql:/docker-entrypoint-initdb.d/1.sql
-      - mysqldata:/var/lib/mysql
-    networks:
-      - users_user
-    restart: always
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: swa_rabbit_mq
-    networks:
-      - rengars_rabbit_mq
-    expose:
-      - ${RABBIT_MQ_PORT}
-    ports:
-      - "15672:15672"
-    restart: on-failure
-
-  eureka:
-    build:
-      context: ../rengars_eureka
-      dockerfile: Dockerfile
-    container_name: eureka
-    networks:
-      - rengars_eureka
-    ports:
-      - "${EUREKA_PORT}:${EUREKA_PORT}"
     restart: on-failure
 
 networks:
