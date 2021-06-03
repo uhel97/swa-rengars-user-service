@@ -9,20 +9,19 @@ import java.util.UUID;
 public class Events {
 
     private ObjectMapper obj = new ObjectMapper();
+    int uniqueID = 0;
 
     public String createEvent(UserDTO user, String eventType) throws IOException {
 
         String jsonStr = obj.writeValueAsString(user);
 
-        String uniqueID = UUID.randomUUID().toString();
+        uniqueID++;
 
-        String event = "{" +
+        return "{" +
                 "\"id\":" + uniqueID +
                 ",\"eventType\":" + eventType +
                 ",\"payload\":" + jsonStr +
                 "}";
-
-        return event;
     }
 
 }
