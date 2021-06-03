@@ -23,8 +23,8 @@ public class RabbitMQSender {
     // @Value("${spring.rabbitmq.routingkey}")
     // private String routingkey;
 
-    public void send(CreateOrUpdateUserDTO createOrUpdateUserDTO){
-        rabbitTemplate.convertAndSend(exchange, "", createOrUpdateUserDTO);
+    public void send(String str){
+        rabbitTemplate.convertAndSend(exchange,"", str);
 //        System.out.println("Send msg = " + createOrUpdateUserDTO);
     }
 
