@@ -1,5 +1,6 @@
 package cz.cvut.fel.oi.swa.rengars.userservice.rest;
 
+import cz.cvut.fel.oi.swa.rengars.userservice.Events;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.UserDTO;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.UserListDTO;
 import cz.cvut.fel.oi.swa.rengars.userservice.rest.users.dtos.requests.CreateOrUpdateUserDTO;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,6 +34,8 @@ public class UserRestController {
 //    @Value("${app.message}")
 //    private String message;
 
+    Events event = new Events();
+
     @GetMapping
     public ResponseEntity<UserListDTO> getUsersList() {
         List<UserDTO> list = userService.getUsersList();
@@ -40,9 +45,9 @@ public class UserRestController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) {
-        rabbitMqSender.send(createOrUpdateUserDTO);
+    public ResponseEntity<UserDTO> createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) throws IOException {
         ResponseEntity<UserDTO> result = new ResponseEntity(new UserDTO(userService.createUser(createOrUpdateUserDTO)), null, HttpStatus.CREATED);
+        rabbitMqSender.send(event.createEvent(result.getBody(), "NEW_USER_ACCOUNT_CREATED"));
         return result;
     }
 
