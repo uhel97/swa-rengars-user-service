@@ -45,7 +45,7 @@ public class UserRestController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) throws IOException {
+    public ResponseEntity<UserDTO> createUser(@RequestBody CreateOrUpdateUserDTO createOrUpdateUserDTO) {
         ResponseEntity<UserDTO> result = new ResponseEntity(new UserDTO(userService.createUser(createOrUpdateUserDTO)), null, HttpStatus.CREATED);
         rabbitMqSender.send(event.createEvent(result.getBody(), "NEW_USER_ACCOUNT_CREATED"));
         return result;
