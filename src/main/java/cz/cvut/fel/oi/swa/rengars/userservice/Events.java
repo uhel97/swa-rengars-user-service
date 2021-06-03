@@ -9,11 +9,11 @@ public class Events {
     private ObjectMapper obj = new ObjectMapper();
     int uniqueID = 0;
 
-    public Event createEvent(UserDTO user, String eventType) {
+    public Event createEvent(UserDTO payload, String eventType) {
 
         uniqueID++;
 
-        return new Event(uniqueID, eventType, user);
+        return new Event(uniqueID, eventType, payload);
     }
 
 }

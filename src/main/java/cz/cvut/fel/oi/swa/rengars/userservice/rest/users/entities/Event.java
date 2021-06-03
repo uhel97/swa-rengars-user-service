@@ -8,10 +8,10 @@ public class Event {
     private String eventType;
     private UserDTO payload;
 
-    public Event(int id, String eventType, UserDTO user) {
+    public Event(int id, String eventType, UserDTO payload) {
         this.id = id;
         this.eventType = eventType;
-        this.payload = user;
+        this.payload = payload;
     }
 
     public int getId() {
@@ -30,11 +30,11 @@ public class Event {
         this.eventType = eventType;
     }
 
-    public UserDTO getUser() {
+    public UserDTO getPayload() {
         return payload;
     }
 
-    public void setUser(UserDTO user) {
-        this.payload = user;
+    public void setPayload(UserDTO payload) {
+        this.payload = payload;
     }
 }
